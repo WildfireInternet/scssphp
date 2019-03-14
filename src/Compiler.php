@@ -3468,7 +3468,7 @@ class Compiler
         // check for hierarchyTreeCallback which allows multi level folder checking for files
         $hierarchyTree = null;
         if (is_callable($this->hierarchyTreeCallback)) {
-            $hierarchyTree = array_reverse($this->hierarchyTreeCallback($pi['dirname']));
+            $hierarchyTree = array_reverse(($this->hierarchyTreeCallback)($pi['dirname']));
             foreach ($hierarchyTree as $p) {
                 array_unshift($this->importPaths, $p);
             }
