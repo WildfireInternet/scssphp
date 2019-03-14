@@ -128,6 +128,8 @@ class Compiler
     protected $sourceMap = self::SOURCE_MAP_NONE;
     protected $sourceMapOptions = [];
 
+    protected $hierarchyTreeCallback;
+
     /**
      * @var string|\Leafo\ScssPhp\Formatter
      */
@@ -3390,6 +3392,16 @@ class Compiler
     }
 
     /**
+     * set hierarchy tree callback
+     * callback used to transform a single path into multiple paths to search through for hierarchy tree support
+     * e.g. parent -> child templates
+     */
+    public function setHierarchyTreeCallback(callable $callback)
+    {
+        $this->hierarchyTreeCallback = $callback;
+    }
+
+    /**
      * Register function
      *
      * @api
@@ -3450,10 +3462,29 @@ class Compiler
             $this->importCache[$realPath] = $tree;
         }
 
+        // temp add current path to import paths so child templates can be imported in current path scope
         $pi = pathinfo($path);
-        array_unshift($this->importPaths, $pi['dirname']);
+
+        // check for hierarchyTreeCallback which allows multi level folder checking for files
+        $hierarchyTree = null;
+        if (is_callable($this->hierarchyTreeCallback)) {
+            $hierarchyTree = array_reverse($this->hierarchyTreeCallback($pi['dirname']));
+            foreach ($hierarchyTree as $p) {
+                array_unshift($this->importPaths, $p);
+            }
+        } else {
+            array_unshift($this->importPaths, $pi['dirname']);
+        }
+
         $this->compileChildrenNoReturn($tree->children, $out);
-        array_shift($this->importPaths);
+
+        if (! empty($hierarchyTree)) {
+            foreach ($hierarchyTree as $p) {
+                array_shift($this->importPaths);
+            }
+        } else {
+            array_shift($this->importPaths);
+        }
     }
 
     /**
