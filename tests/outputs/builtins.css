@@ -53,7 +53,7 @@
   color: "I do?";
   color: 2;
   color: sinserttring;
-  color: s\\tring;
+  color: s\tring;
   color: 6;
   color: tri;
   color: trin;
@@ -172,3 +172,15 @@ div.unquote-test {
 
 .does-compile-4 {
   color: #666; }
+
+.join-list-with-or-without-interpolation {
+  transition: value1 value2, value3 value4;
+  transition: value1 value2, value3 value4;
+  transition: value1, value2, value3 value4;
+  transition: value1 value2, value3, value4;
+  transition: value1, value2, value3, value4;
+  transition: value1, value2, value3, value4; }
+
+.list-zip-types {
+  zip: 2px solid;
+  zip: 3px "bold" blue; }

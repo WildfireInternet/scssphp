@@ -97,3 +97,57 @@ $foo: ('a', 'b');
 div {
     prop: #{$foo};
 }
+
+.badge {
+  a#{&} {
+    text-decoration: none;
+  }
+}
+
+@mixin button-variant($background) {
+  background: $background;
+
+  &:not(.disabled) {
+    border-color: red;
+
+    &:focus {
+	border-width: 3px;
+    }
+  }
+}
+
+.btn-primary {
+    @include button-variant(yellow);
+}
+
+@mixin pagination-mixin($border-radius) {
+  .page-item {
+    &:first-child {
+      .page-link {
+        border-radius: $border-radius;
+      }
+    }
+  }
+}
+
+.pagination {
+  @include pagination-mixin(5px);
+}
+
+@mixin set-border($width) {
+    border: $width solid #000;
+}
+.element {
+    @include set-border(#{2px}); // compiles to "2px solid #000"
+}
+
+$foo: "\
+div > p, \
+div > h1 \
+";
+
+#{$foo} {
+  & > strong {
+    color: red;
+  }
+}

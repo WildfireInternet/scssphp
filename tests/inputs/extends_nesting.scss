@@ -42,3 +42,29 @@
         @extend .btn;
     }
 }
+
+
+.nav-bar {
+    background: #eee;
+    > .item {
+        margin: 0 10px;
+    }
+}
+
+header ul {
+    @extend .nav-bar;
+    > li {
+        @extend .item;
+    }
+}
+
+.a .b {
+  + .btn-block {
+    margin-top: 1.5rem;
+  }
+}
+.a {
+    .b {
+        @extend .btn-block;
+    }
+}

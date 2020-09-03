@@ -58,7 +58,7 @@ code {
 }
 
 
-// chained 
+// chained
 
 .alpha {
     color: red;
@@ -171,7 +171,7 @@ wassup {
     float: right;
     @extend .btn;
   }
-}  
+}
 .edit {
   .new {
    .actions {
@@ -243,7 +243,7 @@ body{
     font-weight: bold;
     text-shadow: none;
     color: #fff;
-    
+
     &:hover {
       @extend .navbar-brand;
     }
@@ -374,4 +374,65 @@ embed.bar {
     div.foo {
         @extend .popup
     }
+}
+
+.class1:not(:last-child) {
+	color:red;
+}
+
+.class2:not(.foo) {
+	@extend .class1;
+}
+
+.class3:not(:last-child) {
+	@extend .class1;
+}
+
+%corners {
+  border-radius: 5px;
+}
+.inline-menu {
+    &:hover > .sub-menu {
+      @extend %corners;
+    }
+}
+
+.header-menu {
+  @extend .inline-menu;
+}
+
+$placeholdername: 'myplaceholder';
+%#{$placeholdername} {
+  color: red;
+}
+.myclass {
+  @extend %myplaceholder;
+}
+
+
+.foo3 {a: b; @extend .bar3}
+.bar3 {c: d; @extend .baz3}
+.baz3 {e: f; @extend .foo3}
+
+
+%tc111 {
+  &:before {
+    display: inline-block;
+  }
+}
+
+.parent {
+  &sub {
+    &:hover {
+      @extend %tc111;
+    }
+  }
+}
+
+.parent {
+  &-sub {
+    &:hover {
+      @extend %tc111;
+    }
+  }
 }

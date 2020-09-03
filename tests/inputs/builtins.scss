@@ -66,7 +66,7 @@
 
     color: scale-color($color, $lightness: 55%);
     color: scale-color($color, $lightness: -55%);
-    
+
     color: ie-hex-str($color);
     color: ie-hex-str(#abc);
 }
@@ -109,12 +109,12 @@
     color: round(3.4);
     color: floor(3.4);
     color: ceil(3.4);
-    
+
     top: floor(10.4px);
     top: ceil(.4ex);
-    width: percentage(100px / 50px); 
+    width: percentage(100px / 50px);
     bottom: abs(-10px);
-    padding: min(5em, 3em, 4em) max(2px, 1in) min(1in, 96px) max(1in, 72pt);
+    padding: min(5em, 3em, 4em,) max(2px, 1in,) min(1in, 96px,) max(1in, 72pt,);
 }
 
 #list {
@@ -151,7 +151,7 @@
 
     zip: zip((1px, 2px), (solid dashed));
     zip: zip(1px 2px 3px, solid dashed, red green blue);
-} 
+}
 
 #introspection {
     t: type-of(100px);
@@ -236,4 +236,24 @@ div.unquote-test {
 .does-compile-4 {
   $args: (#000, 40%);
   color: call(lighten, $args...);
+}
+
+.join-list-with-or-without-interpolation {
+    $list:();
+    $one: (value1 value2);
+    $two: (value3 value4);
+    $list: join($list, #{$one}, comma);
+    $list: join($list, #{$two}, comma);
+
+    transition: $list;
+    transition: join(#{$one}, #{$two}, comma);
+    transition: join($one, #{$two}, comma);
+    transition: join(#{$one}, $two, comma);
+    transition: join($one, $two, comma);
+    transition: join((value1 value2), (value3 value4), comma);
+}
+
+.list-zip-types {
+  zip: zip(2px, (solid dashed));
+  zip: zip(3px, "bold", blue);
 }

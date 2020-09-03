@@ -15,13 +15,25 @@ pre {
 code div {
   height: 200px;
   color: red; }
-  code div {
-    height: 200px;
-    color: red; }
+code div {
+  height: 200px;
+  color: red; }
 
 #partial {
   color: blue; }
 
 body {
-  color: #7c2;
+  color: #7C2;
   background: gray; }
+
+a:before {
+  content: ''; }
+
+div::before {
+  content: ':)'; }
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg); }
+  100% {
+    transform: rotate(359deg); } }

@@ -19,10 +19,10 @@ hello {
 a:hover, .hoverlink, #demo .overview .fakelink:hover {
   text-decoration: underline; }
 
-div.hello.world.hmm, pre div.okay.span.world.hmm, pre #butt .umm div.sure.span.world.hmm, #butt .umm pre div.sure.span.world.hmm, code div.okay.span.world.hmm, code #butt .umm div.sure.span.world.hmm, #butt .umm code div.sure.span.world.hmm {
+div.hello.world.hmm, pre div.world.hmm.okay.span, pre #butt .umm div.world.hmm.span.sure, #butt .umm pre div.world.hmm.span.sure, code div.world.hmm.okay.span, code #butt .umm div.world.hmm.span.sure, #butt .umm code div.world.hmm.span.sure {
   color: blue; }
 
-.xxxxx .xxxxx .xxxxx, code .xxxxx .xxxxx, code code .xxxxx, code code code, code .xxxxx code, .xxxxx code .xxxxx, .xxxxx code code, .xxxxx .xxxxx code {
+.xxxxx .xxxxx .xxxxx, code .xxxxx .xxxxx, .xxxxx code .xxxxx, .xxxxx .xxxxx code, code code .xxxxx, code .xxxxx code, code code code, .xxxxx code code {
   color: green; }
 
 code {
@@ -85,8 +85,9 @@ wassup {
 
 .edit .new .actions {
   padding: 0; }
-  .z, .parent .self.z {
-    color: red; }
+
+.z, .parent .self.z {
+  color: red; }
 
 #content .social-login {
   display: block;
@@ -112,12 +113,14 @@ wassup {
 
 body .to-extend, body .test {
   color: red; }
-  .navbar .navbar-brand, .navbar .navbar-brand:hover {
-    font-weight: bold;
-    text-shadow: none;
-    color: #fff; }
-  .foo__bar#test, input {
-    background: red; }
+
+.navbar .navbar-brand, .navbar .navbar-brand:hover {
+  font-weight: bold;
+  text-shadow: none;
+  color: #fff; }
+
+.foo__bar#test, input {
+  background: red; }
 
 .selector1, .master-class {
   color: blue; }
@@ -136,7 +139,7 @@ body .to-extend, body .test {
   margin-left: 5px; }
   .pagination-bullet:first-child {
     margin-left: 0; }
-  .pagination-bullet.is-active {
+  .is-active.pagination-bullet {
     background-color: white; }
 
 .parent-nested-foo-include .in-nested-foo .child-nested-foo-include, .parent-nested-foo-include .in-nested-foo .beard + .mustache {
@@ -163,3 +166,24 @@ div.popup, .prepend div.foo {
 
 .before span.popup .after {
   color: green; }
+
+.class1:not(:last-child), .class2:not(.foo):not(:last-child), .class3:not(:last-child) {
+  color: red; }
+
+.inline-menu:hover > .sub-menu, .header-menu:hover > .sub-menu {
+  border-radius: 5px; }
+
+.myclass {
+  color: red; }
+
+.foo3, .baz3, .bar3 {
+  a: b; }
+
+.bar3, .foo3, .baz3 {
+  c: d; }
+
+.baz3, .bar3, .foo3 {
+  e: f; }
+
+.parentsub:hover:before, .parent-sub:hover:before {
+  display: inline-block; }

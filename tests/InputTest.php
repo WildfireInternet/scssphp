@@ -1,18 +1,19 @@
 <?php
+
 /**
  * SCSSPHP
  *
- * @copyright 2012-2015 Leaf Corcoran
+ * @copyright 2012-2020 Leaf Corcoran
  *
  * @license http://opensource.org/licenses/MIT MIT
  *
- * @link http://leafo.github.io/scssphp
+ * @link http://scssphp.github.io/scssphp
  */
 
-namespace Leafo\ScssPhp\Tests;
+namespace ScssPhp\ScssPhp\Tests;
 
-use Leafo\ScssPhp\Compiler;
-use Leafo\ScssPhp\LineCommentator;
+use PHPUnit\Framework\TestCase;
+use ScssPhp\ScssPhp\Compiler;
 
 function _dump($value)
 {
@@ -25,46 +26,35 @@ function _quote($str)
 }
 
 /**
- * Input test - runs all the tests in inputs/ and compares their output to ouputs/
+ * Input test - runs all the tests in inputs/ and compares their output to outputs/
  *
  * @author Leaf Corcoran <leafot@gmail.com>
  */
-class InputTest extends \PHPUnit_Framework_TestCase
+class InputTest extends TestCase
 {
+    private $scss;
+
     protected static $inputDir = 'inputs';
     protected static $outputDir = 'outputs';
     protected static $outputNumberedDir = 'outputs_numbered';
-
-    private $saveDir;
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function setUp()
-    {
-        $this->scss = new Compiler();
-        $this->scss->addImportPath(self::$inputDir);
-
-        $this->saveDir = getcwd();
-
-        chdir(__DIR__);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function tearDown()
-    {
-        chdir($this->saveDir);
-    }
 
     /**
      * @dataProvider fileNameProvider
      */
     public function testInputFile($inFname, $outFname)
     {
+        chdir(__DIR__);
+
+        $this->scss = new Compiler();
+        $this->scss->addImportPath(self::$inputDir);
+
+        $fp_err_stream = fopen("php://memory", 'r+');
+        $this->scss->setErrorOuput($fp_err_stream);
+
         if (getenv('BUILD')) {
-            return $this->buildInput($inFname, $outFname);
+            $this->buildInput($inFname, $outFname);
+            $this->assertNull(null);
+            return;
         }
 
         if (! is_readable($outFname)) {
@@ -74,7 +64,9 @@ class InputTest extends \PHPUnit_Framework_TestCase
         $input = file_get_contents($inFname);
         $output = file_get_contents($outFname);
 
-        $this->assertEquals($output, $this->scss->compile($input, substr($inFname, strlen(__DIR__) + 1)));
+        $css = $this->scss->compile($input, substr($inFname, strlen(__DIR__) + 1));
+        fclose($fp_err_stream);
+        $this->assertEquals($output, $css);
     }
 
     /**
@@ -84,10 +76,20 @@ class InputTest extends \PHPUnit_Framework_TestCase
      */
     public function testLineNumbering($inFname, $outFname)
     {
+        chdir(__DIR__);
+
+        $this->scss = new Compiler();
+        $this->scss->addImportPath(self::$inputDir);
+
+        $fp_err_stream = fopen("php://memory", 'r+');
+        $this->scss->setErrorOuput($fp_err_stream);
+
         $this->scss->setLineNumberStyle(Compiler::LINE_COMMENTS);
 
         if (getenv('BUILD')) {
-            return $this->buildInput($inFname, $outFname);
+            $this->buildInput($inFname, $outFname);
+            $this->assertNull(null);
+            return;
         }
 
         if (! is_readable($outFname)) {
@@ -97,14 +99,16 @@ class InputTest extends \PHPUnit_Framework_TestCase
         $input = file_get_contents($inFname);
         $output = file_get_contents($outFname);
 
-        $this->assertEquals($output, $this->scss->compile($input, substr($inFname, strlen(__DIR__) + 1)));
+        $css = $this->scss->compile($input, substr($inFname, strlen(__DIR__) + 1));
+        fclose($fp_err_stream);
+        $this->assertEquals($output, $css);
     }
 
     public function fileNameProvider()
     {
         return array_map(
             function ($a) {
-                return array($a, InputTest::outputNameFor($a));
+                return [$a, InputTest::outputNameFor($a)];
             },
             self::findInputNames()
         );
@@ -114,7 +118,7 @@ class InputTest extends \PHPUnit_Framework_TestCase
     {
         return array_map(
             function ($a) {
-                return array($a, InputTest::outputNumberedNameFor($a));
+                return [$a, InputTest::outputNumberedNameFor($a)];
             },
             self::findInputNames()
         );
@@ -139,7 +143,14 @@ class InputTest extends \PHPUnit_Framework_TestCase
             });
         }
 
-        return $files;
+        $filesKeys = array_map(
+            function ($a) {
+                return substr($a, strlen(__DIR__) + 1);
+            },
+            $files
+        );
+
+        return array_combine($filesKeys, $files);
     }
 
     public static function outputNameFor($input)

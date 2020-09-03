@@ -1,30 +1,27 @@
 <?php
+
 /**
  * SCSSPHP
  *
- * @copyright 2012-2015 Leaf Corcoran
+ * @copyright 2012-2020 Leaf Corcoran
  *
  * @license http://opensource.org/licenses/MIT MIT
  *
- * @link http://leafo.github.io/scssphp
+ * @link http://scssphp.github.io/scssphp
  */
 
-namespace Leafo\ScssPhp\Tests;
+namespace ScssPhp\ScssPhp\Tests;
 
-use Leafo\ScssPhp\Compiler;
+use PHPUnit\Framework\TestCase;
+use ScssPhp\ScssPhp\Compiler;
 
 /**
  * Exception test
  *
  * @author Leaf Corcoran <leafot@gmail.com>
  */
-class ExceptionTest extends \PHPUnit_Framework_TestCase
+class ExceptionTest extends TestCase
 {
-    public function setUp()
-    {
-        $this->scss = new Compiler();
-    }
-
     /**
      * @param string $scss
      * @param string $expectedExceptionMessage
@@ -40,6 +37,8 @@ class ExceptionTest extends \PHPUnit_Framework_TestCase
                 $this->fail('Unexpected exception raised: ' . $e->getMessage() . ' vs ' . $expectedExceptionMessage);
             }
 
+            $this->assertTrue(true);
+
             return;
         }
 
@@ -51,36 +50,36 @@ class ExceptionTest extends \PHPUnit_Framework_TestCase
      */
     public function provideScss()
     {
-        return array(
-            array(<<<'END_OF_SCSS'
+        return [
+            [<<<'END_OF_SCSS'
 .test {
   foo : bar;
 END_OF_SCSS
                 ,
                 'unclosed block'
-            ),
-            array(<<<'END_OF_SCSS'
+            ],
+            [<<<'END_OF_SCSS'
 .test {
 }}
 END_OF_SCSS
                 ,
                 'unexpected }'
-            ),
-            array(<<<'END_OF_SCSS'
+            ],
+            [<<<'END_OF_SCSS'
 .test { color: #fff / 0; }
 END_OF_SCSS
                 ,
                 'color: Can\'t divide by zero'
-            ),
-            array(<<<'END_OF_SCSS'
+            ],
+            [<<<'END_OF_SCSS'
 .test {
   @include foo();
 }
 END_OF_SCSS
                 ,
                 'Undefined mixin foo'
-            ),
-            array(<<<'END_OF_SCSS'
+            ],
+            [<<<'END_OF_SCSS'
 @mixin do-nothing() {
 }
 
@@ -90,7 +89,7 @@ END_OF_SCSS
 END_OF_SCSS
                 ,
                 'Mixin or function doesn\'t have an argument named $a.'
-            ),
+            ],
             array(<<<'END_OF_SCSS'
 div {
   color: darken(cobaltgreen, 10%);
@@ -99,7 +98,7 @@ END_OF_SCSS
                 ,
                 'expecting color'
             ),
-            array(<<<'END_OF_SCSS'
+            [<<<'END_OF_SCSS'
 BODY {
     DIV {
         $bg: red;
@@ -110,8 +109,8 @@ BODY {
 END_OF_SCSS
                 ,
                 'Undefined variable $bg'
-            ),
-            array(<<<'END_OF_SCSS'
+            ],
+            [<<<'END_OF_SCSS'
 @mixin example {
     background: $bg;
 }
@@ -124,26 +123,28 @@ P {
 END_OF_SCSS
                 ,
                 'Undefined variable $bg'
-            ),
-            array(<<<'END_OF_SCSS'
-div { bottom: (4/2px); }
-END_OF_SCSS
-                ,
-                'isn\'t a valid CSS value'
-            ),
-            array(<<<'END_OF_SCSS'
+            ],
+            [<<<'END_OF_SCSS'
 a.important {
   @extend .notice;
 }
 END_OF_SCSS
                 ,
                 'was not found'
-            ),
-        );
+            ],
+            [<<<'END_OF_SCSS'
+@import "missing";
+END_OF_SCSS
+                ,
+                'file not found for @import'
+            ],
+        ];
     }
 
     private function compile($str)
     {
-        return trim($this->scss->compile($str));
+        $scss = new Compiler();
+
+        return trim($scss->compile($str));
     }
 }

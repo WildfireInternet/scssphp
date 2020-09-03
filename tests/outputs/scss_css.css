@@ -1,4 +1,8 @@
 @charset "UTF-8";
+@foo "bar";
+
+@foo;
+
 @import "foo.css";
 @import 'foo.css';
 @import url("foo.css");
@@ -8,6 +12,18 @@
 @import "foo.css" screen, print;
 @import "foo.css" screen, print and (foo: 0);
 @import "foo.css" screen, only print, screen and (foo: 0);
+@import "foo2.css";
+@import "bar2.css";
+@import "baz2.css";
+@foo bar;
+@bar baz;
+
+@namespace "http://www.w3.org/Profiles/xhtml1-strict";
+
+@namespace url(http://www.w3.org/Profiles/xhtml1-strict);
+
+@namespace html url("http://www.w3.org/Profiles/xhtml1-strict");
+
 [foo~=bar] {
   a: b; }
 
@@ -30,7 +46,7 @@ foo {
   d: "fraz bran";
   e: flanny-blanny-blan;
   f: url(http://sass-lang.com);
-  h: #abc; }
+  h: #aabbcc; }
 
 selector {
   property: value;
@@ -41,14 +57,14 @@ sel {
 
 .foo {
   /* Foo
-   Bar
-   Baz */
+Bar
+  Baz */
   a: b; }
 
 .foo {
   /* Foo
-   Bar
-   Baz */
+Bar
+  Baz */
   a: b; }
 
 .foo {
@@ -59,20 +75,17 @@ sel {
 .foo {
   /* Foo
    Bar
-   Baz */
+  Baz */
   a: b; }
 
 @foo {
   a: b;
-  rule {
-    a: b; } }
-
+    rule {
+      a: b; } }
 @foo {
   a: b; }
-
 @bar {
   a: b; }
-
 @foo "bar"
 
 foo {
@@ -89,6 +102,7 @@ bar {
 
 baz {
   bar: baz; }
+
 /*
  * foo
  */
@@ -103,25 +117,31 @@ E F, G H {
 
 E > F, G > H {
   a: b; }
+
 /* This is a CSS comment. */
 .one {
   color: green; }
+
 /* Another comment */
 /* The following should not be used:
- .two {color: red;} */
+.two {color: red;} */
 .three {
   color: green;
   /* color: red; */ }
+
 /**
- .four {color: red;} */
+.four {color: red;} */
 .five {
   color: green; }
+
 /**/
 .six {
   color: green; }
+
 /*********/
 .seven {
   color: green; }
+
 /* a comment **/
 .eight {
   color: green; }
@@ -134,9 +154,9 @@ foo {
   e: foo\"\'bar; }
 
 foo {
-  a: "\foo bar";
-  b: "foo\ bar";
-  c: "\2022 \0020";
+  a: "oo bar";
+  b: "foo bar";
+  c: "•  ";
   d: "foo\\bar";
   e: "foo\"'bar"; }
 
@@ -150,14 +170,10 @@ foo {
   name/*\**/: val;
   name: val; }
 
-@foo "bar"  ;
-
 foo {
   a: -moz-element(#foo);
   b: -webkit-element(#foo);
   b: -foobar-element(#foo); }
-
-@foo ;
 
 foo {
   bar: baz; }
@@ -221,6 +237,7 @@ foo {
 foo {
   a: d;
   /*: b; c */ }
+
 /* Foo
  * Bar */
 .foo {
@@ -338,20 +355,17 @@ foo {
 @media all {
   rule1 {
     prop: val; }
-
   rule2 {
     prop: val; } }
 
 @media screen, print {
   rule1 {
     prop: val; }
-
   rule2 {
     prop: val; } }
 
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
   a: b; }
-
 @media only screen, print and (foo: 0px) and (bar: flam(12px solid)) {
   a: b; }
 
@@ -382,20 +396,12 @@ foo {
 
 @foo bar {
   a: b; }
-
 @bar baz {
   c: d; }
-
-@foo bar;
-@bar baz;
-
-
 /* Foo
  * Bar */
 /* Baz
  * Bang */
-
-
 .foo {
   /* Foo
    * Bar */
@@ -405,12 +411,6 @@ foo {
 .foo {
   /* Foo Bar */
   /* Baz Bang */ }
-
-@namespace "http://www.w3.org/Profiles/xhtml1-strict";
-
-@namespace url(http://www.w3.org/Profiles/xhtml1-strict);
-
-@namespace html url("http://www.w3.org/Profiles/xhtml1-strict");
 
 [foo|bar=baz] {
   a: b; }
@@ -451,6 +451,9 @@ foo|* {
 :not(.blah) {
   a: b; }
 
+:not(.blah) {
+  a: b; }
+
 :not([foo]) {
   a: b; }
 
@@ -470,6 +473,9 @@ foo|* {
   a: b; }
 
 :not(a#foo.bar) {
+  a: b; }
+
+:not(#foo .bar > baz) {
   a: b; }
 
 :not(#foo .bar > baz) {
@@ -517,27 +523,24 @@ foo {
 :nth-child(-2n+ 3) {
   a: b; }
 
-:nth-child( 2n + 3) {
+:nth-child(2n + 3) {
   a: b; }
 
 foo {
   a: foo bar baz;
-  b: foo, #abc, -12;
+  b: foo, #aabbcc, -12;
   c: 1px/2px/-3px;
   d: foo bar, baz/bang; }
 
 @page {
   prop1: val;
   prop2: val; }
-
 @page flap {
   prop1: val;
   prop2: val; }
-
 @page :first {
   prop1: val;
   prop2: val; }
-
 @page flap:first {
   prop1: val;
   prop2: val; }
@@ -550,9 +553,11 @@ foo {
   /* Foo
    * Bar */
   a: b; }
+
 /* Foo */
 .foo {
   a: b; }
+
 /* Foo
  * Bar */
 .foo {
@@ -597,8 +602,8 @@ E, F G, H {
 
 body {
   /*
-   //comment here
-   */ }
+  //comment here
+  */ }
 
 E > F {
   a: b; }
@@ -738,7 +743,6 @@ E ~ F {
 @supports (a: b) and (c: d) or (not (d: e)) and ((not (f: g)) or (not ((h: i) and (j: k)))) {
   .foo {
     a: b; } }
-
 @-prefix-supports (a: b) and (c: d) or (not (d: e)) and ((not (f: g)) or (not ((h: i) and (j: k)))) {
   .foo {
     a: b; } }
@@ -767,3 +771,10 @@ foo {
 foo {
   a: foo();
   b: bar baz-bang() bip; }
+
+.alpha {
+  color: #1f2526bf;
+  background-color: #1f2526ff; }
+
+.shortcode-4c29f540779d8549daf934275faea11 {
+  color: red; }

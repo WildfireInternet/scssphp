@@ -251,6 +251,10 @@ foo {
 
 @import "foo.css" screen, only print, screen and (foo: 0);
 
+@import "foo2.css", // this is a comment
+        "bar2.css", /* this is another comment */
+        "baz2.css"; // this is a third comment
+
 foo {
   a: foo !important;
   b: foo bar !important;
@@ -562,6 +566,10 @@ foo|* {
   a: b; }
 
 
+:not( .blah ) {
+  a: b; }
+
+
 :not([foo]) {
   a: b; }
 
@@ -591,6 +599,10 @@ foo|* {
 
 
 :not(#foo .bar > baz) {
+  a: b; }
+
+
+:not( #foo .bar > baz ) {
   a: b; }
 
 
@@ -982,4 +994,12 @@ foo {
   a: foo();
   b: bar baz-bang() bip; }
 
+.alpha {
+  color: #1f2526bf;
+  background-color: #1f2526ff; }
 
+$id: 4c29f540779d8549daf934275faea11;
+$selector: '.shortcode-' + $id;
+#{$selector} {
+  color: red;
+}

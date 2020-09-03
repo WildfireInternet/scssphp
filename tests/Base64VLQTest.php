@@ -1,24 +1,26 @@
 <?php
+
 /**
  * SCSSPHP
  *
- * @copyright 2018 Anthon Pang
+ * @copyright 2018-2020 Anthon Pang
  *
  * @license http://opensource.org/licenses/MIT MIT
  *
- * @link http://leafo.github.io/scssphp
+ * @link http://scssphp.github.io/scssphp
  */
 
-namespace Leafo\ScssPhp\Tests;
+namespace ScssPhp\ScssPhp\Tests;
 
-use Leafo\ScssPhp\SourceMap\Base64VLQ;
+use PHPUnit\Framework\TestCase;
+use ScssPhp\ScssPhp\SourceMap\Base64VLQ;
 
 /**
  * Base64VLQ encoder test
  *
  * @author Anthon Pang <anthon.pang@gmail.com>
  */
-class Base64VLQTest extends \PHPUnit_Framework_TestCase
+class Base64VLQTest extends TestCase
 {
     /**
      * Test encode
@@ -30,7 +32,7 @@ class Base64VLQTest extends \PHPUnit_Framework_TestCase
      */
     public function testEncode($expected, $value)
     {
-        $encoder = new Base64VLQ;
+        $encoder = new Base64VLQ();
 
         $this->assertEquals($expected, $encoder->encode($value));
     }

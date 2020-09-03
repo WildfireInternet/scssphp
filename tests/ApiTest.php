@@ -1,32 +1,33 @@
 <?php
+
 /**
  * SCSSPHP
  *
- * @copyright 2012-2015 Leaf Corcoran
+ * @copyright 2012-2020 Leaf Corcoran
  *
  * @license http://opensource.org/licenses/MIT MIT
  *
- * @link http://leafo.github.io/scssphp
+ * @link http://scssphp.github.io/scssphp
  */
 
-namespace Leafo\ScssPhp\Tests;
+namespace ScssPhp\ScssPhp\Tests;
 
-use Leafo\ScssPhp\Compiler;
+use PHPUnit\Framework\TestCase;
+use ScssPhp\ScssPhp\Compiler;
 
 /**
  * API test
  *
  * @author Leaf Corcoran <leafot@gmail.com>
  */
-class ApiTest extends \PHPUnit_Framework_TestCase
+class ApiTest extends TestCase
 {
-    public function setUp()
-    {
-        $this->scss = new Compiler();
-    }
+    private $scss;
 
     public function testUserFunction()
     {
+        $this->scss = new Compiler();
+
         $this->scss->registerFunction('add-two', function ($args) {
             list($a, $b) = $args;
             return $a[1] + $b[1];
@@ -40,6 +41,8 @@ class ApiTest extends \PHPUnit_Framework_TestCase
 
     public function testUserFunctionNull()
     {
+        $this->scss = new Compiler();
+
         $this->scss->registerFunction('get-null', function ($args) {
             return Compiler::$null;
         });
@@ -52,12 +55,14 @@ class ApiTest extends \PHPUnit_Framework_TestCase
 
     public function testUserFunctionKwargs()
     {
+        $this->scss = new Compiler();
+
         $this->scss->registerFunction(
             'divide',
             function ($args, $kwargs) {
                 return $kwargs['dividend'][1] / $kwargs['divisor'][1];
             },
-            array('dividend', 'divisor')
+            ['dividend', 'divisor']
         );
 
         $this->assertEquals(
@@ -66,16 +71,10 @@ class ApiTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testImportMissing()
-    {
-        $this->assertEquals(
-            '@import "missing";',
-            $this->compile('@import "missing";')
-        );
-    }
-
     public function testImportCustomCallback()
     {
+        $this->scss = new Compiler();
+
         $this->scss->addImportPath(function ($path) {
             return __DIR__ . '/inputs/' . str_replace('.css', '.scss', $path);
         });
@@ -91,6 +90,8 @@ class ApiTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetVariables($expected, $scss, $variables)
     {
+        $this->scss = new Compiler();
+
         $this->scss->setVariables($variables);
 
         $this->assertEquals($expected, $this->compile($scss));
@@ -98,31 +99,56 @@ class ApiTest extends \PHPUnit_Framework_TestCase
 
     public function provideSetVariables()
     {
-        return array(
-            array(
+        return [
+            [
                 ".magic {\n  color: red;\n  width: 760px; }",
                 '.magic { color: $color; width: $base - 200; }',
-                array(
+                [
                     'color' => 'red',
                     'base'  => '960px',
-                ),
-            ),
-            array(
-                ".logo {\n  color: #808080; }",
+                ],
+            ],
+            [
+                ".logo {\n  color: gray; }",
                 '.logo { color: desaturate($primary, 100%); }',
-                array(
+                [
                     'primary' => '#ff0000',
-                ),
-            ),
-        );
+                ],
+            ],
+            // !default
+            [
+                ".default {\n  color: red; }",
+                '$color: red !default;' . "\n" . '.default { color: $color; }',
+                [
+                ],
+            ],
+            // no !default
+            [
+                ".default {\n  color: red; }",
+                '$color: red;' . "\n" . '.default { color: $color; }',
+                [
+                ],
+                    'color' => 'blue',
+            ],
+            // override !default
+            [
+                ".default {\n  color: blue; }",
+                '$color: red !default;' . "\n" . '.default { color: $color; }',
+                [
+                    'color' => 'blue',
+                ],
+            ],
+        ];
     }
 
     public function testCompileByteOrderMarker()
     {
+        $this->scss = new Compiler();
+
         // test that BOM is stripped/ignored
         $this->assertEquals(
-            '@import "main";',
-            $this->compile("\xEF\xBB\xBF@import \"main\";")
+            '@import "main.css";',
+            $this->compile("\xEF\xBB\xBF@import \"main.css\";")
         );
     }
 
